@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chathumi Navodya | Data Science Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <link rel="stylesheet" href="portfolio-styles-enhanced.css" />
+</head>
+<body>
+
+  <div class="bg-animation" aria-hidden="true">
+    <canvas class="net-canvas" id="netCanvas"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+
+  <div class="cursor"></div>
+  <div class="cursor-glow"></div>
+
+  <!-- NAV -->
+  <nav class="nav-glass" id="navbar">
+    <div class="nav-wrapper">
+      <a href="#home" class="logo">
+        <span class="logo-bracket">&lt;</span>
+        <span class="logo-text">CN</span>
+        <span class="logo-bracket">/&gt;</span>
+      </a>
+      <ul class="nav-menu">
+        <li><a href="#home"           class="nav-link active">Home</a></li>
+        <li><a href="#about"          class="nav-link">About</a></li>
+        <li><a href="#skills"         class="nav-link">Skills</a></li>
+        <li><a href="#education"      class="nav-link">Education</a></li>
+        <li><a href="#experience"     class="nav-link">Experience</a></li>
+        <li><a href="#projects"       class="nav-link">Work</a></li>
+        <li><a href="#certifications" class="nav-link">Certs</a></li>
+        <li><a href="#contact"        class="nav-link">Contact</a></li>
+      </ul>
+      <div class="nav-toggle" aria-label="Open Menu" role="button" tabindex="0">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="home" class="hero-section">
+    <canvas id="matrixCanvas" aria-hidden="true"></canvas>
+    <div id="particles-js"></div>
+    <div class="hero-grid">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fas fa-chart-line"></i>
+          <span>Open to Opportunities</span>
+        </div>
+        <h1 class="hero-title">
+          <span class="title-line">Hi, I'm</span>
+          <span class="title-name" data-text="Chathumi Navodya">Chathumi Navodya</span>
+        </h1>
+        <div class="hero-subtitle">
+          <span class="role-text">I'm</span>
+          <span class="typing-container">
+            <span id="typed-text"></span><span class="cursor-blink">|</span>
+          </span>
+        </div>
+        <p class="hero-desc">
+          Final-year BSc student specializing in Applied Data Science Communication.
+          Transforming complex data into actionable insights through machine learning,
+          cloud analytics, and intelligent visualization.
+        </p>
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary btn-magnetic">
+            <span>Explore My Work</span><i class="fas fa-arrow-right"></i>
+          </a>
+          <a href="assets/Chathumi_Navodya_CV.pdf" class="btn btn-outline btn-magnetic" download>
+            <span>Download CV</span><i class="fa-solid fa-file-arrow-down"></i>
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-card"><div class="stat-value">5+</div><div class="stat-label">Projects</div></div>
+          <div class="stat-card"><div class="stat-value">12+</div><div class="stat-label">Certifications</div></div>
+          <div class="stat-card"><div class="stat-value">3+</div><div class="stat-label">Years Learning</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="profile-container">
+          <div class="p-pulse r1"></div>
+          <div class="p-pulse r2"></div>
+          <div class="p-pulse r3"></div>
+          <div class="p-arc-outer"></div>
+          <div class="p-arc-inner"></div>
+          <div class="p-bracket tl"></div>
+          <div class="p-bracket tr"></div>
+          <div class="p-bracket bl"></div>
+          <div class="p-bracket br"></div>
+          <div class="hex-frame">
+            <div class="hex-clip">
+              <img src="images/profile.jpg" alt="Chathumi Navodya" />
+              <div class="hex-scan"></div>
+              <div class="hex-tint"></div>
+            </div>
+            <div class="hex-glow-border"></div>
+          </div>
+          <div class="p-pill pp-1"><i class="fa-brands fa-python"></i> Python</div>
+          <div class="p-pill pp-2"><i class="fa-solid fa-brain"></i> ML / AI</div>
+          <div class="p-pill pp-3"><i class="fa-solid fa-chart-column"></i> Power BI</div>
+          <div class="p-pill pp-4"><i class="fa-solid fa-database"></i> SQL</div>
+          <div class="p-pill pp-5"><i class="fa-brands fa-microsoft"></i> Azure</div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-prompt">
+      <div class="mouse"><div class="wheel"></div></div>
+      <span></span>
+    </div>
+  </section>
+
+  <script>
+  (() => {
+    const canvas = document.getElementById("matrixCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    function resize() {
+      const s = canvas.closest("section") || canvas.parentElement;
+      canvas.width = s.offsetWidth; canvas.height = s.offsetHeight;
+    }
+    resize(); window.addEventListener("resize", resize);
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$#%&∑∫∂π".split("");
+    const fs = 15; let cols = Math.floor(canvas.width/fs), drops = Array(cols).fill(1);
+    function draw() {
+      ctx.fillStyle="rgba(7,8,21,0.07)"; ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle="rgba(168,85,247,0.65)"; ctx.font=fs+"px 'JetBrains Mono',monospace";
+      for(let i=0;i<drops.length;i++){
+        ctx.fillText(letters[Math.floor(Math.random()*letters.length)],i*fs,drops[i]*fs);
+        if(drops[i]*fs>canvas.height&&Math.random()>.975)drops[i]=0; drops[i]++;
+      }
+    }
+    setInterval(draw,38);
+    window.addEventListener("resize",()=>{ cols=Math.floor(canvas.width/fs); drops=Array(cols).fill(1); });
+  })();
+  if(typeof tsParticles!=="undefined"){
+    tsParticles.load("particles-js",{
+      fullScreen:{enable:false},
+      particles:{ number:{value:55}, color:{value:"#A855F7"}, links:{enable:true,color:"#A855F7",distance:150,opacity:.35,width:1}, move:{enable:true,speed:.9}, size:{value:1.8} },
+      interactivity:{ events:{onHover:{enable:true,mode:"grab"}}, modes:{grab:{distance:190,links:{opacity:.55}}} }
+    });
+  }
+  </script>
+
+  <!-- ABOUT -->
+  <section id="about" class="about-section section-block">
+    <div class="container">
+      <div class="section-header centered">
+        <h2 class="section-title">About Me</h2>
+        <span class="section-underline"></span>
+      </div>
+      <div class="about-grid">
+        <div class="about-content">
+          <p class="about-intro">
+            Hello! I'm Chathumi Navodya Sathsarani, a passionate data science enthusiast
+            currently pursuing my BSc in Applied Data Science Communication at
+            <strong>General Sir John Kotelawala Defence University (KDU)</strong>.
+          </p>
+          <p>My journey into data science began with a curiosity about how data can tell stories and drive decisions. I specialize in transforming complex datasets into actionable insights through machine learning, statistical analysis, and interactive visualizations.</p>
+          <p>I have hands-on experience with <strong>Python</strong>, <strong>SQL</strong>, <strong>R</strong>, <strong>Machine Learning</strong>, <strong>Power BI</strong>, and <strong>Microsoft Azure</strong>.</p>
+          <div class="tech-stack">
+            <h3>Technologies I work with:</h3>
+            <ul class="tech-list">
+              <li><i class="fas fa-terminal"></i> Python (Pandas, NumPy, Scikit-learn)</li>
+              <li><i class="fas fa-database"></i> SQL Server, T-SQL</li>
+              <li><i class="fas fa-chart-line"></i> Power BI, DAX, Data Modeling</li>
+              <li><i class="fas fa-cloud"></i> Microsoft Azure, Cloud Analytics</li>
+              <li><i class="fas fa-brain"></i> Machine Learning, Deep Learning</li>
+              <li><i class="fas fa-code"></i> TensorFlow, Streamlit, API Development</li>
+            </ul>
+          </div>
+        </div>
+        <div class="about-visual">
+          <div class="info-cards">
+            <div class="info-card">
+              <div class="card-icon"><i class="fas fa-graduation-cap"></i></div>
+              <h4>Education</h4><p>BSc Applied Data Science Communication</p>
+              <span class="card-meta">KDU, Sri Lanka</span>
+            </div>
+            <div class="info-card">
+              <div class="card-icon"><i class="fas fa-briefcase"></i></div>
+              <h4>Experience</h4><p>Intern - Recoveries Dept</p>
+              <span class="card-meta">Sampath Bank PLC</span>
+            </div>
+            <div class="info-card">
+              <div class="card-icon"><i class="fas fa-award"></i></div>
+              <h4>Certifications</h4><p>Microsoft, IBM, Cisco &amp; More</p>
+              <span class="card-meta">12+ Certifications</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="skills-section section-block">
+    <div class="container">
+      <div class="section-header centered">
+        <h2 class="section-title">Skills &amp; Expertise</h2>
+        <span class="section-underline"></span>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-brain"></i></div><h3 class="skill-title">Machine Learning</h3><span class="skill-tag green">ML</span></div>
+        <div class="skill-card"><div class="skill-icon"><i class="fa-brands fa-microsoft"></i></div><h3 class="skill-title">Microsoft Azure</h3><span class="skill-tag blue">Cloud</span></div>
+        <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-network-wired"></i></div><h3 class="skill-title">Deep Learning</h3><span class="skill-tag green">DL</span></div>
+        <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-robot"></i></div><h3 class="skill-title">AI</h3><span class="skill-tag green">AI</span></div>
+        <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-language"></i></div><h3 class="skill-title">NLP</h3><span class="skill-tag green">NLP</span></div>
+        <div class="skill-card"><div class="skill-icon"><i class="fa-brands fa-python"></i></div><h3 class="skill-title">Python</h3><span class="skill-tag">Core</span></div>
+        <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-database"></i></div><h3 class="skill-title">SQL (T-SQL)</h3><span class="skill-tag blue">Database</span></div>
+        <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-chart-column"></i></div><h3 class="skill-title">Power BI</h3><span class="skill-tag pink">BI</span></div>
+        <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-diagram-project"></i></div><h3 class="skill-title">Data Modeling</h3><span class="skill-tag pink">BI</span></div>
+        <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-cloud"></i></div><h3 class="skill-title">Cloud Analytics</h3><span class="skill-tag blue">Cloud</span></div>
+        <div class="skill-card"><div class="skill-icon"><i class="fa-brands fa-github"></i></div><h3 class="skill-title">Git &amp; GitHub</h3><span class="skill-tag">Tools</span></div>
+        <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div><h3 class="skill-title">EDA</h3><span class="skill-tag yellow">Analysis</span></div>
+        <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-square-root-variable"></i></div><h3 class="skill-title">Statistics</h3><span class="skill-tag yellow">Math</span></div>
+        <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-chart-simple"></i></div><h3 class="skill-title">R</h3><span class="skill-tag yellow">Stats</span></div>
+        <div class="skill-card"><div class="skill-icon"><i class="fa-brands fa-microsoft"></i></div><h3 class="skill-title">Power Platform</h3><span class="skill-tag pink">Apps</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION — split-timeline -->
+  <section id="education" class="education section-block">
+    <div class="container">
+      <div class="section-header centered">
+        <h2 class="section-title">Education Timeline</h2>
+        <span class="section-underline"></span>
+      </div>
+      <div class="timeline split-timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-date">2024 – 2027</div>
+          <div class="timeline-content">
+            <div class="timeline-head">
+              <img src="assets/kdu.png" class="timeline-logo" alt="KDU Logo" loading="lazy" />
+              <div class="timeline-text">
+                <h3>BSc in Applied Data Science &amp; Communication</h3>
+                <p>General Sir John Kotelawala Defence University (KDU), Ratmalana</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">May 2023 – Nov 2023</div>
+          <div class="timeline-content">
+            <div class="timeline-head">
+              <img src="assets/IHRA-LOGO.jpg" class="timeline-logo" alt="University of Colombo Logo" loading="lazy" />
+              <div class="timeline-text">
+                <h3>Certificate Course in Computer Applications</h3>
+                <p>University of Colombo, Sri Lanka</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">Apr 2023 – Oct 2023</div>
+          <div class="timeline-content">
+            <div class="timeline-head">
+              <img src="assets/IHRA-LOGO.jpg" class="timeline-logo" alt="University of Colombo Logo" loading="lazy" />
+              <div class="timeline-text">
+                <h3>Certificate Course in English (Intermediate)</h3>
+                <p>University of Colombo, Sri Lanka</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">2014 – 2022</div>
+          <div class="timeline-content">
+            <div class="timeline-head">
+              <img src="assets/mahinda-college.png" class="timeline-logo" alt="Mahinda Rajapaksha College Logo" loading="lazy" />
+              <div class="timeline-text">
+                <h3>Grade 06 – 13</h3>
+                <p>Mahinda Rajapaksha College, Homagama</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE — simple-timeline -->
+  <section id="experience" class="experience section-block">
+    <div class="container">
+      <div class="section-header centered">
+        <h2 class="section-title">Experience</h2>
+        <span class="section-underline"></span>
+      </div>
+      <div class="timeline simple-timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-date">Jun 2023 – Feb 2024</div>
+          <div class="timeline-content">
+            <div class="timeline-head">
+              <img src="assets/sampath-bank.png" class="timeline-logo" alt="Sampath Bank Logo" loading="lazy" />
+              <div>
+                <h3>Sampath Bank PLC</h3>
+                <p><b>Intern — Recoveries Department</b></p>
+              </div>
+            </div>
+            <ul>
+              <li>Assisted in loan recovery processes and repayment monitoring activities.</li>
+              <li>Supported non-performing loan (NPL) tracking and customer follow-ups.</li>
+              <li>Gained exposure to credit risk management and corporate banking operations.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">Nov 2025 – Jan 2026</div>
+          <div class="timeline-content">
+            <div class="timeline-head">
+              <img src="assets/data-science-club.png" class="timeline-logo" alt="Data Science Club Logo" loading="lazy" />
+              <div>
+                <h3>AI and Data Science Club, KDU</h3>
+                <p><b>Active Member and Treasurer</b></p>
+              </div>
+            </div>
+            <ul>
+              <li>Participated in data science activities, collaborative challenges, and knowledge-sharing sessions.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="projects-section section-block">
+    <div class="container">
+      <div class="section-header centered">
+        <h2 class="section-title">Featured Projects</h2>
+        <span class="section-underline"></span>
+      </div>
+      <div class="project-filters">
+        <button class="filter-btn active" data-filter="all">All Projects</button>
+        <button class="filter-btn" data-filter="ml">Machine Learning</button>
+        <button class="filter-btn" data-filter="analytics">Analytics</button>
+        <button class="filter-btn" data-filter="nlp">NLP</button>
+        <button class="filter-btn" data-filter="dl">Deep Learning</button>
+      </div>
+      <div class="projects-grid">
+
+        <div class="flip-card" data-category="ai">
+  <div class="flip-card-inner">
+
+    <!-- FRONT -->
+    <div class="flip-card-front">
+      <div class="project-front-media">
+        <img src="images/projects/policy-ai-assistant.png" alt="Policy AI Assistant" loading="lazy" />
+      </div>
+
+      <div class="project-front-body">
+        <div class="project-miniicon">
+          <i class="fas fa-robot"></i>
+        </div>
+
+        <h3 class="project-front-title">Policy AI Assistant</h3>
+        <p class="project-front-sub">
+          Generative AI policy analysis system
+        </p>
+      </div>
+    </div>
+
+    <!-- BACK -->
+    <div class="flip-card-back">
+      <h3>Policy AI Assistant (2026)</h3>
+
+      <p>
+        Developed an AI-powered policy analysis web application that can upload
+        policy PDFs, clean and summarise documents, generate scenario-based
+        policy drafts, and answer questions using a retrieval-grounded chatbot.
+      </p>
+
+      <div class="project-tech">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Streamlit</span>
+        <span class="tech-tag">Gemini API</span>
+        <span class="tech-tag">NLP</span>
+        <span class="tech-tag">TF-IDF</span>
+      </div>
+
+      <div class="project-links">
+
+        <!-- GitHub -->
+        <a class="project-link"
+          href="https://github.com/ChathumiNavodya/policy-web-app"
+          target="_blank"
+          rel="noopener">
+          <i class="fab fa-github"></i>
+        </a>
+
+        <!-- Optional Live Demo -->
+        <a class="project-link"
+          href="https://policy-web-app-chathuminavodya.streamlit.app/"
+          target="_blank"
+          rel="noopener">
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+        <div class="flip-card" data-category="dl">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="project-front-media"><img src="images/projects/quizcraft-ai.png" alt="QuizCraft AI" loading="lazy" /></div>
+              <div class="project-front-body">
+                <div class="project-miniicon"><i class="fas fa-brain"></i></div>
+                <h3 class="project-front-title">QuizCraft AI</h3>
+                <p class="project-front-sub">AI quiz generation from study notes (Gemini + Streamlit)</p>
+              </div>
+            </div>
+            <div class="flip-card-back">
+              <h3>AI-Powered Quiz Generation Platform (2026)</h3>
+              <p>Turns PDFs/documents into MCQ quizzes with scoring and progress tracking.</p>
+              <div class="project-tech"><span class="tech-tag">Python</span><span class="tech-tag">Streamlit</span><span class="tech-tag">SQLite</span><span class="tech-tag">Gemini API</span></div>
+              <div class="project-links">
+                <a class="project-link" href="https://github.com/ChathumiNavodya/quizcraft-ai" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
+                <a class="project-link" href="https://quizcraft-ai-chathuminavodya.streamlit.app/" target="_blank" rel="noopener"><i class="fas fa-link"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card" data-category="ml">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="project-front-media"><img src="images/projects/walmart-forecasting.png" alt="Walmart Forecasting" loading="lazy" /></div>
+              <div class="project-front-body">
+                <div class="project-miniicon"><i class="fas fa-chart-line"></i></div>
+                <h3 class="project-front-title">Walmart Forecasting</h3>
+                <p class="project-front-sub">Time-series forecasting (SARIMAX + LSTM)</p>
+              </div>
+            </div>
+            <div class="flip-card-back">
+              <h3>Walmart Weekly Sales Forecasting (Jan 2026)</h3>
+              <p>Built a forecasting system to predict weekly Walmart sales (2010–2012) using a naive baseline, SARIMAX, and multivariate LSTM.</p>
+              <div class="project-tech"><span class="tech-tag">Python</span><span class="tech-tag">TensorFlow</span><span class="tech-tag">Statsmodels</span></div>
+              <div class="project-links"><a class="project-link" href="https://github.com/ChathumiNavodya/walmart-weekly-sales-forecasting" target="_blank" rel="noopener"><i class="fab fa-github"></i></a></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card" data-category="nlp">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="project-front-media"><img src="images/projects/fake-job.png" alt="Fake Job Detection" loading="lazy" /></div>
+              <div class="project-front-body">
+                <div class="project-miniicon"><i class="fas fa-user-shield"></i></div>
+                <h3 class="project-front-title">Fake Job Detection</h3>
+                <p class="project-front-sub">NLP pipeline + explainability (SHAP)</p>
+              </div>
+            </div>
+            <div class="flip-card-back">
+              <h3>Fake Job Posting Detection</h3>
+              <p>End-to-end NLP pipeline using TF-IDF + ML classifiers with SHAP interpretability and feature importance analysis.</p>
+              <div class="project-tech"><span class="tech-tag">NLP</span><span class="tech-tag">TF-IDF</span><span class="tech-tag">SHAP</span></div>
+              <div class="project-links"><a class="project-link" href="https://github.com/ChathumiNavodya/fake-job-detection-explainable-ml-" target="_blank" rel="noopener"><i class="fab fa-github"></i></a></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card" data-category="ml">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="project-front-media"><img src="images/projects/flood-impact.png" alt="Flood Impact Prediction" loading="lazy" /></div>
+              <div class="project-front-body">
+                <div class="project-miniicon"><i class="fas fa-water"></i></div>
+                <h3 class="project-front-title">Flood Impact Prediction</h3>
+                <p class="project-front-sub">ML decision support system + Streamlit dashboard</p>
+              </div>
+            </div>
+            <div class="flip-card-back">
+              <h3>Flood Impact Prediction &amp; Relief Priority</h3>
+              <p>End-to-end system: flood occurrence prediction + inundation estimation + relief priority scoring with interactive Streamlit dashboard.</p>
+              <div class="project-tech"><span class="tech-tag">Python</span><span class="tech-tag">Scikit-learn</span><span class="tech-tag">Streamlit</span><span class="tech-tag">Matplotlib</span></div>
+              <div class="project-links"><a class="project-link" href="https://github.com/ChathumiNavodya/flood-inundation-model" target="_blank" rel="noopener"><i class="fab fa-github"></i></a></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card" data-category="analytics">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="project-front-media"><img src="images/projects/uk-visa.png" alt="UK Visa Analysis" loading="lazy" /></div>
+              <div class="project-front-body">
+                <div class="project-miniicon"><i class="fas fa-plane-departure"></i></div>
+                <h3 class="project-front-title">UK Visa Analysis</h3>
+                <p class="project-front-sub">SQL Server + Power BI + DAX</p>
+              </div>
+            </div>
+            <div class="flip-card-back">
+              <h3>UK Visa Sponsorship Analysis (2010–2023)</h3>
+              <p>Built star schema, DimDate, and DAX measures for trends, running totals, extension vs visa patterns, and COVID-era impact.</p>
+              <div class="project-tech"><span class="tech-tag">SQL Server</span><span class="tech-tag">Power BI</span><span class="tech-tag">DAX</span></div>
+              <div class="project-links"><a class="project-link" href="https://github.com/ChathumiNavodya/uk-migration-analysis-sql-powerbi" target="_blank" rel="noopener"><i class="fab fa-github"></i></a></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications" class="certifications section-block">
+    <div class="container">
+      <div class="section-header centered">
+        <h2 class="section-title">Certifications</h2>
+        <span class="section-underline"></span>
+      </div>
+      <div class="cert-grid">
+        <div class="cert-card"><div class="cert-icon"><i class="fa-solid fa-database"></i></div><div class="cert-content"><h3>SQL for Data Science</h3><div class="cert-sub">Great Learning</div><div class="cert-year">Dec 2024</div><span class="cert-badge green">SQL • MySQL • SSMS</span></div></div>
+        <div class="cert-card"><div class="cert-icon"><i class="fa-solid fa-chart-simple"></i></div><div class="cert-content"><h3>Basics of Microsoft Power BI</h3><div class="cert-sub">UniAthena</div><div class="cert-year">Oct 2024</div><span class="cert-badge blue">Power BI • Visualization</span></div></div>
+        <div class="cert-card"><div class="cert-icon"><i class="fa-solid fa-certificate"></i></div><div class="cert-content"><h3>Power BI Certificate</h3><div class="cert-sub">Business Intelligence</div><div class="cert-year">2024</div><span class="cert-badge blue">Data Modeling • Dashboards</span></div></div>
+        <div class="cert-card"><div class="cert-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div><div class="cert-content"><h3>GenAI 101 with Pieces</h3><div class="cert-sub">Canvas Credentials (Badgr)</div><div class="cert-year">Feb 2025</div><span class="cert-badge yellow">GenAI • Prompting</span></div></div>
+        <div class="cert-card"><div class="cert-icon"><i class="fa-solid fa-plug"></i></div><div class="cert-content"><h3>Postman API Fundamentals Student Expert</h3><div class="cert-sub">Canvas Credentials (Badgr)</div><div class="cert-year">Jan 2025</div><span class="cert-badge green">REST • API Testing</span></div></div>
+        <div class="cert-card"><div class="cert-icon"><i class="fa-brands fa-python"></i></div><div class="cert-content"><h3>Python for Beginners</h3><div class="cert-sub">University of Moratuwa</div><div class="cert-year">May 2025</div><span class="cert-badge blue">Python • OOP • SDLC</span></div></div>
+        <div class="cert-card"><div class="cert-icon"><i class="fa-solid fa-flask"></i></div><div class="cert-content"><h3>Introduction to Data Science</h3><div class="cert-sub">Cisco</div><div class="cert-year">Jun 2025</div><span class="cert-badge yellow">Data • Analytics Basics</span></div></div>
+        <div class="cert-card"><div class="cert-icon"><i class="fa-solid fa-chart-area"></i></div><div class="cert-content"><h3>Data Analysis with Python</h3><div class="cert-sub">IBM (Coursera)</div><div class="cert-year">May 2025</div><span class="cert-badge green">Pandas • EDA • Jupyter</span></div></div>
+        <div class="cert-card"><div class="cert-icon"><i class="fa-solid fa-robot"></i></div><div class="cert-content"><h3>AI/ML Engineer – Stage 1</h3><div class="cert-sub">SLIIT</div><div class="cert-year">Aug 2025</div><span class="cert-badge blue">ML • Applied ML</span></div></div>
+        <div class="cert-card"><div class="cert-icon"><i class="fa-brands fa-microsoft"></i></div><div class="cert-content"><h3>Microsoft Power Up Program – Intro to Agents</h3><div class="cert-sub">Credly</div><div class="cert-year"><a href="https://www.credly.com/badges/ea8bcf72-8654-4afa-9c86-311737c8011c" target="_blank" rel="noopener">View Badge ↗</a></div><span class="cert-badge blue">Power Platform • Agents</span></div></div>
+        <div class="cert-card"><div class="cert-icon"><i class="fa-solid fa-flask"></i></div><div class="cert-content"><h3>Introduction to Data Science (Badge)</h3><div class="cert-sub">Credly</div><div class="cert-year"><a href="https://www.credly.com/earner/earned/badge/28b2e651-6fc8-43c9-af66-ebba8d94bacc" target="_blank" rel="noopener">View Badge ↗</a></div><span class="cert-badge yellow">Data Science • Analytics</span></div></div>
+        <div class="cert-card"><div class="cert-icon"><i class="fa-brands fa-python"></i></div><div class="cert-content"><h3>Data Analysis with Python (Badge)</h3><div class="cert-sub">Credly</div><div class="cert-year"><a href="https://www.credly.com/badges/8f35d391-8575-4ee4-adff-197a5af77992" target="_blank" rel="noopener">View Badge ↗</a></div><span class="cert-badge green">Python • Pandas • EDA</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT — all details correct & active -->
+  <section id="contact" class="contact-section section-block">
+    <div class="container">
+      <div class="section-header centered">
+        <h2 class="section-title">Let's Connect</h2>
+        <span class="section-underline"></span>
+      </div>
+      <!-- ── BALANCED 2-COLUMN CONTACT GRID ── -->
+      <div class="contact-grid-new">
+
+        <!-- ── LEFT: Contact Cards ── -->
+        <div class="contact-left-col">
+
+          <p class="contact-intro-text">
+            I'm always open to new opportunities, collaborative projects,
+            or just a conversation about data science and AI. Feel free to reach out!
+          </p>
+
+          <div class="contact-cards-list">
+
+            <a href="mailto:navodyasathsarani2003@gmail.com" class="ccard">
+              <div class="ccard-icon" style="background:linear-gradient(135deg,#06b6d4,#3b82f6)">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="ccard-body">
+                <span class="ccard-label">Email</span>
+                <span class="ccard-value">navodyasathsarani2003@gmail.com</span>
+              </div>
+              <i class="fas fa-arrow-right ccard-arrow"></i>
+            </a>
+
+            <a href="tel:+94703394005" class="ccard">
+              <div class="ccard-icon" style="background:linear-gradient(135deg,#10b981,#06b6d4)">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div class="ccard-body">
+                <span class="ccard-label">Phone</span>
+                <span class="ccard-value">+94 70 339 4005</span>
+              </div>
+              <i class="fas fa-arrow-right ccard-arrow"></i>
+            </a>
+
+            <a href="https://www.linkedin.com/in/chathumi-navodya-sathsarani"
+               target="_blank" rel="noopener noreferrer" class="ccard">
+              <div class="ccard-icon" style="background:linear-gradient(135deg,#3b82f6,#818cf8)">
+                <i class="fab fa-linkedin"></i>
+              </div>
+              <div class="ccard-body">
+                <span class="ccard-label">LinkedIn</span>
+                <span class="ccard-value">chathumi-navodya-sathsarani</span>
+              </div>
+              <i class="fas fa-arrow-right ccard-arrow"></i>
+            </a>
+
+            <a href="https://github.com/ChathumiNavodya"
+               target="_blank" rel="noopener noreferrer" class="ccard">
+              <div class="ccard-icon" style="background:linear-gradient(135deg,#818cf8,#a855f7)">
+                <i class="fab fa-github"></i>
+              </div>
+              <div class="ccard-body">
+                <span class="ccard-label">GitHub</span>
+                <span class="ccard-value">github.com/ChathumiNavodya</span>
+              </div>
+              <i class="fas fa-arrow-right ccard-arrow"></i>
+            </a>
+
+            <div class="ccard ccard-location">
+              <div class="ccard-icon" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="ccard-body">
+                <span class="ccard-label">Location</span>
+                <span class="ccard-value">Colombo District, Western Province, Sri Lanka</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Social row -->
+          <div class="contact-socials-row">
+            <a href="https://github.com/ChathumiNavodya" target="_blank" rel="noopener noreferrer"
+               class="csocial-btn" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/chathumi-navodya-sathsarani" target="_blank" rel="noopener noreferrer"
+               class="csocial-btn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="mailto:navodyasathsarani2003@gmail.com"
+               class="csocial-btn" aria-label="Email"><i class="fas fa-envelope"></i></a>
+            <a href="tel:+94703394005"
+               class="csocial-btn" aria-label="Phone"><i class="fas fa-phone"></i></a>
+          </div>
+
+        </div>
+
+        <!-- ── RIGHT: Contact Form ── -->
+        <div class="contact-right-col">
+          <div class="cform-card">
+            <h3 class="cform-title">Send a Message</h3>
+            <p class="cform-sub">Fill in the form and Gmail will open with your message pre-filled — just hit Send.</p>
+
+            <form id="contact-form" class="cform" novalidate>
+
+              <div class="cform-row">
+                <div class="cfield">
+                  <label for="cf-name">Full Name</label>
+                  <input type="text" id="cf-name" name="name"
+                         placeholder="e.g. Chathumi Navodya"
+                         required autocomplete="name" />
+                </div>
+                <div class="cfield">
+                  <label for="cf-email">Email Address</label>
+                  <input type="email" id="cf-email" name="email"
+                         placeholder="e.g. you@example.com"
+                         required autocomplete="email" />
+                </div>
+              </div>
+
+              <div class="cfield">
+                <label for="cf-subject">Subject</label>
+                <input type="text" id="cf-subject" name="subject"
+                       placeholder="e.g. Job opportunity / Project collaboration"
+                       required />
+              </div>
+
+              <div class="cfield">
+                <label for="cf-message">Message</label>
+                <textarea id="cf-message" name="message" rows="6"
+                          placeholder="Hi Chathumi, I'd like to discuss…"
+                          required></textarea>
+              </div>
+
+              <button type="submit" id="form-submit-btn" class="cform-submit">
+                <i class="fas fa-paper-plane"></i>
+                <span>Send Message</span>
+              </button>
+
+            </form>
+
+            <div id="form-status" class="form-status" style="display:none;margin-top:14px;"></div>
+          </div>
+        </div>
+
+      </div><!-- /.contact-grid-new -->
+
+
+      <!-- Contact form handler — Gmail compose (works everywhere, no setup needed) -->
+      <script>
+      (function () {
+        var form   = document.getElementById('contact-form');
+        var status = document.getElementById('form-status');
+        var btn    = document.getElementById('form-submit-btn');
+        if (!form) return;
+
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          var name    = (form.querySelector('[name="name"]').value    || '').trim();
+          var email   = (form.querySelector('[name="email"]').value   || '').trim();
+          var subject = (form.querySelector('[name="subject"]').value || '').trim();
+          var message = (form.querySelector('[name="message"]').value || '').trim();
+
+          if (!name || !email || !subject || !message) {
+            status.innerHTML     = '<i class="fas fa-exclamation-circle"></i> Please fill in all fields.';
+            status.className     = 'form-status error';
+            status.style.display = 'block';
+            return;
+          }
+
+          /* Build a pre-filled Gmail compose URL */
+          var body = 'From: ' + name + ' (' + email + ')\n\n' + message;
+          var gmailUrl = 'https://mail.google.com/mail/?view=cm'
+            + '&to=navodyasathsarani2003%40gmail.com'
+            + '&su=' + encodeURIComponent(subject)
+            + '&body=' + encodeURIComponent(body);
+
+          /* Show success, open Gmail in new tab */
+          status.innerHTML     = '<i class="fas fa-check-circle"></i> Opening Gmail with your message — just hit Send!';
+          status.className     = 'form-status success';
+          status.style.display = 'block';
+
+          window.open(gmailUrl, '_blank', 'noopener,noreferrer');
+          form.reset();
+
+          setTimeout(function () {
+            status.style.display = 'none';
+            status.className     = 'form-status';
+          }, 8000);
+        });
+      })();
+      </script>
+    </div>
+  </section>
+
+  <!-- ADVANCED FOOTER -->
+  <footer class="footer-adv">
+    <div class="footer-beam"></div>
+    <div class="footer-adv-inner">
+
+      <!-- Brand -->
+      <div class="fa-col fa-brand">
+        <div class="fa-logo">
+          <span class="fa-bracket">&lt;</span><span class="fa-initials">CN</span><span class="fa-bracket">/&gt;</span>
+        </div>
+        <p class="fa-tagline">Turning data into decisions.<br>One model at a time.</p>
+        <div class="fa-status"><span class="fa-dot"></span>Available for opportunities</div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="fa-col">
+        <h4 class="fa-col-title">Navigation</h4>
+        <ul class="fa-links">
+          <li><a href="#home"><i class="fas fa-chevron-right"></i>Home</a></li>
+          <li><a href="#about"><i class="fas fa-chevron-right"></i>About</a></li>
+          <li><a href="#skills"><i class="fas fa-chevron-right"></i>Skills</a></li>
+          <li><a href="#education"><i class="fas fa-chevron-right"></i>Education</a></li>
+        </ul>
+      </div>
+
+      <!-- Portfolio -->
+      <div class="fa-col">
+        <h4 class="fa-col-title">Portfolio</h4>
+        <ul class="fa-links">
+          <li><a href="#experience"><i class="fas fa-chevron-right"></i>Experience</a></li>
+          <li><a href="#projects"><i class="fas fa-chevron-right"></i>Projects</a></li>
+          <li><a href="#certifications"><i class="fas fa-chevron-right"></i>Certifications</a></li>
+          <li><a href="#contact"><i class="fas fa-chevron-right"></i>Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Connect -->
+      <div class="fa-col">
+        <h4 class="fa-col-title">Connect</h4>
+        <div class="fa-contact-list">
+          <a href="mailto:navodyasathsarani2003@gmail.com" class="fa-contact-item">
+            <i class="fas fa-envelope"></i><span>navodyasathsarani2003@gmail.com</span>
+          </a>
+          <a href="tel:+94703394005" class="fa-contact-item">
+            <i class="fas fa-phone"></i><span>+94 70 339 4005</span>
+          </a>
+          <a href="https://www.linkedin.com/in/chathumi-navodya-sathsarani"
+             target="_blank" rel="noopener noreferrer" class="fa-contact-item">
+            <i class="fab fa-linkedin"></i><span>LinkedIn Profile</span>
+          </a>
+          <a href="https://github.com/ChathumiNavodya"
+             target="_blank" rel="noopener noreferrer" class="fa-contact-item">
+            <i class="fab fa-github"></i><span>GitHub Profile</span>
+          </a>
+        </div>
+        <div class="fa-socials">
+          <a href="https://github.com/ChathumiNavodya" target="_blank" rel="noopener noreferrer" class="fa-social-btn" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="https://www.linkedin.com/in/chathumi-navodya-sathsarani" target="_blank" rel="noopener noreferrer" class="fa-social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <a href="mailto:navodyasathsarani2003@gmail.com" class="fa-social-btn" aria-label="Email"><i class="fas fa-envelope"></i></a>
+          <a href="tel:+94703394005" class="fa-social-btn" aria-label="Phone"><i class="fas fa-phone"></i></a>
+        </div>
+      </div>
+
+    </div>
+    <div class="fa-divider"></div>
+    <div class="fa-bottom">
+      <div class="fa-copy">© 2025 <span class="fa-name">Chathumi Navodya Sathsarani</span> · All Rights Reserved</div>
+      <button class="fa-btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+      </button>
+    </div>
+  </footer>
+
+  <script src="portfolio-script-enhanced.js"></script>
+</body>
+</html>
