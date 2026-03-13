@@ -498,13 +498,30 @@ ul{ margin:0; padding-left: 18px; }
   letter-spacing:.03em;
 }
 .p-pill i{ color:rgba(6,182,212,.80); font-size:.72rem; }
+
 .pp-1{ top: 3%;  left:-4%;  animation:pBob 3.2s ease-in-out infinite 0.0s; }
 .pp-2{ top:22%;  right:-6%; animation:pBob 3.8s ease-in-out infinite 0.5s; }
 .pp-3{ top:55%;  right:-5%; animation:pBob 3.5s ease-in-out infinite 1.1s; }
 .pp-4{ top:70%;  left:-3%;  animation:pBob 3.0s ease-in-out infinite 1.8s; }
 .pp-5{ top:38%;  left:-7%;  animation:pBob 4.2s ease-in-out infinite 0.7s; }
-@keyframes pBob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-7px); } }
 
+.pp-6{
+  position:absolute;
+  bottom:-20px;
+  left:50%;
+  transform:translateX(-50%);
+  animation:pBobR 3.6s ease-in-out infinite;
+}
+
+@keyframes pBob{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-7px); }
+}
+
+@keyframes pBobR{
+  0%,100%{ transform:translateX(-50%) translateY(0); }
+  50%{ transform:translateX(-50%) translateY(-7px); }
+}
 /* Responsive */
 @media(max-width:980px){
   .profile-container{ width:440px; height:440px; }
