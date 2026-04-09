@@ -396,7 +396,7 @@ ul{ margin:0; padding-left: 18px; }
 .hex-clip{
   width: 260px;
   height: 260px;
-  clip-path: polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
+  border-radius: 50%;   /* makes it round */
   overflow: hidden;
   position: relative;
 }
