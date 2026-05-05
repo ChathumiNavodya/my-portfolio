@@ -455,63 +455,60 @@
   })();
 
   /* =========================
-     CONTACT FORM
-  ========================= */
-  (() => {
-    const form = $("#contact-form");
-    const status = $("#form-status");
+   CONTACT FORM (FIXED)
+========================= */
+(() => {
+  const form = $("#contact-form");
+  const status = $("#form-status");
 
-    if (!form || !status) return;
+  if (!form || !status) return;
 
-    const encodeForm = (formData) =>
-      new URLSearchParams([...formData.entries()]).toString();
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    const name = form.querySelector('[name="name"]').value;
+    const email = form.querySelector('[name="email"]').value;
+    const subject = form.querySelector('[name="subject"]').value;
+    const message = form.querySelector('[name="message"]').value;
 
-      const submitButton = form.querySelector('button[type="submit"]');
-      const originalButtonMarkup = submitButton ? submitButton.innerHTML : "";
-      const formData = new FormData(form);
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalButtonMarkup = submitButton.innerHTML;
 
-      status.textContent = "Sending message...";
-      status.className = "form-status";
-      status.style.display = "block";
+    // UI loading state
+    status.textContent = "Opening Gmail...";
+    status.className = "form-status";
+    status.style.display = "block";
 
-      if (submitButton) {
-        submitButton.disabled = true;
-        submitButton.innerHTML = '<span>Sending...</span><i class="fas fa-spinner fa-spin"></i>';
-      }
+    submitButton.disabled = true;
+    submitButton.innerHTML =
+      '<span>Opening...</span><i class="fas fa-spinner fa-spin"></i>';
 
-      try {
-        const response = await fetch("/", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: encodeForm(formData)
-        });
+    // Create mailto link
+    const mailtoLink = `mailto:wpcnsperera@gmail.com?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\n\n${message}`
+    )}`;
 
-        if (!response.ok) throw new Error(`Form submission failed with ${response.status}`);
+    // Open Gmail / email client
+    window.location.href = mailtoLink;
 
-        status.textContent = "Message sent successfully. I'll get back to you soon.";
-        status.className = "form-status success";
-        form.reset();
-      } catch (error) {
-        console.error(error);
-        status.textContent = "This form only works on your deployed site. Use the Gmail button if you're testing locally.";
-        status.className = "form-status error";
-      } finally {
-        if (submitButton) {
-          submitButton.disabled = false;
-          submitButton.innerHTML = originalButtonMarkup;
-        }
+    // Reset UI
+    setTimeout(() => {
+      submitButton.disabled = false;
+      submitButton.innerHTML = originalButtonMarkup;
 
-        setTimeout(() => {
-          status.style.display = "none";
-          status.className = "form-status";
-        }, 4500);
-      }
-    });
-  })();
+      status.textContent = "Email client opened successfully!";
+      status.className = "form-status success";
 
+      form.reset();
+
+      setTimeout(() => {
+        status.style.display = "none";
+      }, 3000);
+    }, 1000);
+  });
+})();
   /* =========================
      SECTION SHIMMER TRIGGER
   ========================= */
