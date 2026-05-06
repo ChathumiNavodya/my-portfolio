@@ -454,59 +454,88 @@
     });
   })();
 
-  /* =========================
-   CONTACT FORM (FIXED)
+ /* =========================
+   CONTACT FORM - GMAIL FIX
+========================= */
+/* =========================
+   CONTACT FORM - GMAIL FIX
 ========================= */
 (() => {
-  const form = $("#contact-form");
-  const status = $("#form-status");
+  const form = document.getElementById("contact-form");
+  const status = document.getElementById("form-status");
+  const button = document.getElementById("form-submit-btn");
 
-  if (!form || !status) return;
+  if (!form || !status || !button) return;
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    const name = form.querySelector('[name="name"]').value;
-    const email = form.querySelector('[name="email"]').value;
-    const subject = form.querySelector('[name="subject"]').value;
-    const message = form.querySelector('[name="message"]').value;
+    const name = form.querySelector('[name="name"]').value.trim();
+    const email = form.querySelector('[name="email"]').value.trim();
+    const subject = form.querySelector('[name="subject"]').value.trim();
+    const message = form.querySelector('[name="message"]').value.trim();
 
-    const submitButton = form.querySelector('button[type="submit"]');
-    const originalButtonMarkup = submitButton.innerHTML;
+    if (!name || !email || !subject || !message) {
+      status.innerHTML =
+        '<i class="fas fa-exclamation-circle"></i> Please fill in all fields.';
+      status.className = "form-status error";
+      status.style.display = "block";
+      return;
+    }
 
-    // UI loading state
-    status.textContent = "Opening Gmail...";
+    const originalButtonHTML = button.innerHTML;
+
+    button.disabled = true;
+    button.innerHTML =
+      '<i class="fas fa-spinner fa-spin"></i><span>Opening...</span>';
+
+    status.innerHTML =
+      '<i class="fas fa-spinner fa-spin"></i> Opening Gmail...';
     status.className = "form-status";
     status.style.display = "block";
 
-    submitButton.disabled = true;
-    submitButton.innerHTML =
-      '<span>Opening...</span><i class="fas fa-spinner fa-spin"></i>';
+    const body =
+      "Name: " + name + "\n" +
+      "Email: " + email + "\n\n" +
+      "Message:\n" + message;
 
-    // Create mailto link
-    const mailtoLink = `mailto:wpcnsperera@gmail.com?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\n\n${message}`
-    )}`;
+    const gmailUrl =
+      "https://mail.google.com/mail/u/0/?view=cm&fs=1" +
+      "&tf=1" +
+      "&to=" + encodeURIComponent("wpcnsperera@gmail.com") +
+      "&su=" + encodeURIComponent(subject) +
+      "&body=" + encodeURIComponent(body);
 
-    // Open Gmail / email client
-    window.location.href = mailtoLink;
+    const mailtoUrl =
+      "mailto:wpcnsperera@gmail.com" +
+      "?subject=" + encodeURIComponent(subject) +
+      "&body=" + encodeURIComponent(body);
 
-    // Reset UI
-    setTimeout(() => {
-      submitButton.disabled = false;
-      submitButton.innerHTML = originalButtonMarkup;
+    const gmailWindow = window.open(gmailUrl, "_blank");
 
-      status.textContent = "Email client opened successfully!";
-      status.className = "form-status success";
+    if (
+      !gmailWindow ||
+      gmailWindow.closed ||
+      typeof gmailWindow.closed === "undefined"
+    ) {
+      window.location.href = mailtoUrl;
+    }
 
-      form.reset();
+    status.innerHTML =
+      '<i class="fas fa-check-circle"></i> Gmail opened. Please click Send.';
+    status.className = "form-status success";
 
-      setTimeout(() => {
-        status.style.display = "none";
-      }, 3000);
-    }, 1000);
+    form.reset();
+
+    setTimeout(function () {
+      button.disabled = false;
+      button.innerHTML = originalButtonHTML;
+    }, 800);
+
+    setTimeout(function () {
+      status.style.display = "none";
+      status.className = "form-status";
+    }, 5000);
   });
 })();
   /* =========================
